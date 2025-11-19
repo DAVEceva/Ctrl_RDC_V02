@@ -12,7 +12,6 @@
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(180deg, #1a4d7a 0%, #2d6fa8 50%, #4a8bc2 100%);
@@ -20,41 +19,35 @@
             color: #fff;
             -webkit-font-smoothing: antialiased;
         }
-
         .container {
             max-width: 600px;
             margin: 0 auto;
             padding: 20px;
             min-height: 100vh;
         }
-
         .header {
             text-align: center;
             padding: 20px 0;
             margin-bottom: 30px;
         }
-
         .header h1 {
             font-size: 28px;
             font-weight: 600;
             margin-bottom: 8px;
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
-
         .header p {
             font-size: 14px;
             opacity: 0.9;
         }
-
         .card {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255,255,255,0.13);
             border-radius: 16px;
             padding: 24px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            color: #333;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.13);
+            color: #fff;
         }
-
         .btn {
             width: 100%;
             min-height: 56px;
@@ -68,48 +61,41 @@
             margin-bottom: 12px;
             text-align: center;
             background: linear-gradient(180deg, #d32f2f 0%, #b71c1c 100%);
-            color: white;
-            box-shadow: 0 2px 8px rgba(211, 47, 47, 0.3);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(211,47,47,0.3);
             touch-action: manipulation;
         }
-
         .btn:active {
             transform: scale(0.98);
-            box-shadow: 0 1px 4px rgba(211, 47, 47, 0.4);
+            box-shadow: 0 1px 4px rgba(211,47,47,0.4);
         }
-
         .btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
-
         .btn-secondary {
             background: linear-gradient(180deg, #666 0%, #444 100%);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
-
         .btn-success {
             background: linear-gradient(180deg, #43a047 0%, #2e7d32 100%);
             box-shadow: 0 2px 8px rgba(67, 160, 71, 0.3);
         }
-
+        .input-group label,
+        .stat-label,
+        .empty-state p,
+        .tag-item,
+        #menuView .card h2,
+        #deleteView .card h2 {
+            color: #fff;
+        }
         .input-group {
             margin-bottom: 20px;
         }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
-            font-size: 14px;
-        }
-
         .input-wrapper {
             display: flex;
             gap: 8px;
         }
-
         input[type="text"] {
             flex: 1;
             min-height: 56px;
@@ -117,87 +103,82 @@
             font-size: 16px;
             border: 2px solid #ddd;
             border-radius: 12px;
-            transition: border-color 0.3s ease;
+            background: #224a76;
+            color: #fff;
         }
-
         input[type="text"]:focus {
             outline: none;
-            border-color: #1a4d7a;
+            border-color: #fff;
         }
-
+        input[type="text"]::placeholder {
+            color: #bbdefb !important;
+        }
         .btn-validate {
             min-width: 120px;
             margin-bottom: 0;
         }
-
         .stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 16px;
             margin-bottom: 20px;
         }
-
         .stat-card {
             background: linear-gradient(135deg, #1a4d7a 0%, #2d6fa8 100%);
             padding: 20px;
             border-radius: 12px;
             text-align: center;
             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            color: #fff;
         }
-
         .stat-value {
             font-size: 36px;
             font-weight: 700;
             margin-bottom: 4px;
         }
-
         .stat-label {
             font-size: 12px;
-            opacity: 0.9;
+            opacity: 1;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-
         .tag-list {
             max-height: 300px;
             overflow-y: auto;
             margin-top: 16px;
-            background: #f5f5f5;
+            background: #273957;
             border-radius: 8px;
             padding: 12px;
         }
-
         .tag-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 12px;
-            background: white;
+            background: #224a76;
             border-radius: 8px;
             margin-bottom: 8px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            color: #fff;
         }
-
         .tag-code {
             font-family: 'Courier New', monospace;
             font-size: 14px;
             font-weight: 600;
-            color: #1a4d7a;
+            color: #fff;
         }
-
         .tag-delete {
             min-height: 36px;
             min-width: 36px;
             padding: 8px;
             background: linear-gradient(180deg, #d32f2f 0%, #b71c1c 100%);
-            color: white;
+            color: #fff;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             font-size: 14px;
             font-weight: 600;
         }
-
         .alert {
             padding: 16px;
             border-radius: 12px;
@@ -205,20 +186,16 @@
             font-weight: 600;
             text-align: center;
             animation: slideIn 0.3s ease;
+            color: #fff;
         }
-
         .alert-error {
-            background: #ffebee;
-            color: #c62828;
+            background: #c62828;
             border: 2px solid #ef5350;
         }
-
         .alert-success {
-            background: #e8f5e9;
-            color: #2e7d32;
+            background: #43a047;
             border: 2px solid #66bb6a;
         }
-
         @keyframes slideIn {
             from {
                 opacity: 0;
@@ -229,41 +206,33 @@
                 transform: translateY(0);
             }
         }
-
         .hidden {
             display: none !important;
         }
-
         .menu-grid {
             display: grid;
             gap: 12px;
         }
-
         @media (max-width: 480px) {
             .container {
                 padding: 12px;
             }
-
             .card {
                 padding: 16px;
             }
-
             .stat-value {
                 font-size: 28px;
             }
         }
-
         .scanner-active {
             border: 3px solid #43a047;
             box-shadow: 0 0 0 4px rgba(67, 160, 71, 0.2);
         }
-
         .empty-state {
             text-align: center;
             padding: 40px 20px;
-            color: #666;
+            color: #fff;
         }
-
         .empty-state svg {
             width: 64px;
             height: 64px;
@@ -278,10 +247,9 @@
             <h1>🏷️ Zebra Scanner</h1>
             <p>Control de Etiquetas</p>
         </div>
-
         <!-- Vista Menu -->
         <div id="menuView" class="card">
-            <h2 style="margin-bottom: 24px; color: #1a4d7a; font-size: 22px;">Menú Principal</h2>
+            <h2 style="margin-bottom: 24px;">Menú Principal</h2>
             <div class="menu-grid">
                 <button class="btn" onclick="app.showScanner()">📱 Empezar a Escanear</button>
                 <button class="btn btn-success" onclick="app.exportToExcel()" id="btnExportMenu">📊 Exportar Resultado</button>
@@ -289,12 +257,10 @@
                 <button class="btn btn-secondary" onclick="app.showDeleteView()">❌ Eliminar Etiqueta</button>
             </div>
         </div>
-
         <!-- Vista Scanner -->
         <div id="scannerView" class="hidden">
             <div class="card">
                 <div id="alertContainer"></div>
-                
                 <div class="stats">
                     <div class="stat-card">
                         <div class="stat-value" id="totalScanned">0</div>
@@ -305,7 +271,6 @@
                         <div class="stat-label">Última</div>
                     </div>
                 </div>
-
                 <div class="input-group">
                     <label>Escanear o Ingresar Código</label>
                     <div class="input-wrapper">
@@ -318,7 +283,6 @@
                         <button class="btn btn-validate" onclick="app.validateManual()">✓</button>
                     </div>
                 </div>
-
                 <div class="tag-list" id="tagList">
                     <div class="empty-state">
                         <svg fill="currentColor" viewBox="0 0 20 20">
@@ -328,18 +292,15 @@
                     </div>
                 </div>
             </div>
-
             <div class="card">
                 <button class="btn btn-success" onclick="app.exportToExcel()">📊 Exportar a Excel</button>
                 <button class="btn btn-secondary" onclick="app.showMenu()">↩️ Volver al Menú</button>
             </div>
         </div>
-
         <!-- Vista Eliminar -->
         <div id="deleteView" class="hidden">
             <div class="card">
-                <h2 style="margin-bottom: 24px; color: #1a4d7a; font-size: 22px;">Eliminar Etiqueta</h2>
-                
+                <h2 style="margin-bottom: 24px;">Eliminar Etiqueta</h2>
                 <div class="input-group">
                     <label>Código a Eliminar</label>
                     <input 
@@ -349,53 +310,45 @@
                         autocomplete="off"
                         autocapitalize="characters">
                 </div>
-
                 <button class="btn" onclick="app.deleteTag()">❌ Eliminar</button>
                 <button class="btn btn-secondary" onclick="app.showMenu()">↩️ Volver al Menú</button>
-
                 <div class="tag-list" id="deleteTagList" style="margin-top: 24px;"></div>
             </div>
         </div>
     </div>
-
     <!-- SheetJS Library -->
     <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
-
     <script>
         const app = {
             tags: [],
-            
+            lastAddLock: false,
+            normalizeCode(str) {
+                return (str || "").trim().replace(/\r/g, "").replace(/\n/g, "").toUpperCase();
+            },
             init() {
                 this.setupEventListeners();
                 this.focusInput();
                 this.updateUI();
             },
-
             setupEventListeners() {
                 const scanInput = document.getElementById('scanInput');
-                
-                // Auto-submit cuando se detecta el patrón correcto (Zebra scanner)
                 scanInput.addEventListener('input', (e) => {
-                    const value = e.target.value.trim().toUpperCase();
+                    const value = app.normalizeCode(e.target.value);
                     const pattern = /^R\d{13}$/;
-                    
                     if (pattern.test(value)) {
                         setTimeout(() => {
-                            this.addTag(value);
+                            app.addTag(value);
                             scanInput.value = '';
                         }, 100);
                     }
                 });
-
-                // Prevenir submit con Enter en el input
                 scanInput.addEventListener('keypress', (e) => {
                     if (e.key === 'Enter') {
                         e.preventDefault();
-                        this.validateManual();
+                        app.validateManual();
                     }
                 });
             },
-
             focusInput() {
                 setTimeout(() => {
                     const scanInput = document.getElementById('scanInput');
@@ -404,64 +357,54 @@
                     }
                 }, 100);
             },
-
             addTag(code) {
-                code = code.trim().toUpperCase();
-
+                code = this.normalizeCode(code);
                 if (!code) {
                     return;
                 }
-
-                // Verificar duplicado
+                if (this.lastAddLock) return;
+                this.lastAddLock = true;
+                setTimeout(() => { this.lastAddLock = false; }, 400);
                 if (this.tags.includes(code)) {
                     this.showAlert('⚠️ ETIQUETA YA CONTROLADA', 'error');
                     this.playErrorSound();
+                    this.focusInput();
                     return;
                 }
-
-                // Agregar a la lista
                 this.tags.push(code);
                 this.showAlert('✓ Etiqueta registrada', 'success');
                 this.playSuccessSound();
                 this.updateUI();
                 this.focusInput();
             },
-
             validateManual() {
                 const scanInput = document.getElementById('scanInput');
-                const value = scanInput.value.trim().toUpperCase();
-
+                const value = this.normalizeCode(scanInput.value);
                 if (!value) {
                     this.showAlert('⚠️ Ingrese un código', 'error');
                     return;
                 }
-
                 this.addTag(value);
                 scanInput.value = '';
             },
-
             deleteTag() {
                 const deleteInput = document.getElementById('deleteInput');
-                const code = deleteInput.value.trim().toUpperCase();
-
+                const code = this.normalizeCode(deleteInput.value);
                 if (!code) {
                     this.showAlert('⚠️ Ingrese un código a eliminar', 'error');
                     return;
                 }
-
                 const index = this.tags.indexOf(code);
                 if (index === -1) {
                     this.showAlert('⚠️ Etiqueta no encontrada', 'error');
                     return;
                 }
-
                 this.tags.splice(index, 1);
                 this.showAlert('✓ Etiqueta eliminada', 'success');
                 deleteInput.value = '';
                 this.updateUI();
                 this.updateDeleteView();
             },
-
             deleteTagFromList(code) {
                 const index = this.tags.indexOf(code);
                 if (index > -1) {
@@ -470,82 +413,55 @@
                     this.updateDeleteView();
                 }
             },
-
             clearAll() {
                 if (this.tags.length === 0) {
                     this.showAlert('⚠️ No hay etiquetas para limpiar', 'error');
                     return;
                 }
-
                 if (confirm(`¿Está seguro de eliminar todas las ${this.tags.length} etiquetas?`)) {
                     this.tags = [];
                     this.updateUI();
                     this.showAlert('✓ Todas las etiquetas eliminadas', 'success');
                 }
             },
-
             exportToExcel() {
                 if (this.tags.length === 0) {
                     this.showAlert('⚠️ No hay etiquetas para exportar', 'error');
                     return;
                 }
-
-                // Preparar datos
                 const data = this.tags.map((tag, index) => ({
                     'N°': index + 1,
                     'Código': tag
                 }));
-
-                // Agregar fila de total
                 data.push({
                     'N°': '',
                     'Código': `TOTAL: ${this.tags.length} etiquetas`
                 });
-
-                // Crear libro de Excel
                 const ws = XLSX.utils.json_to_sheet(data);
-                
-                // Ajustar ancho de columnas
                 ws['!cols'] = [
                     { wch: 8 },
                     { wch: 20 }
                 ];
-
                 const wb = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(wb, ws, 'Etiquetas');
-
-                // Generar nombre de archivo con fecha
                 const fecha = new Date().toISOString().split('T')[0];
                 const filename = `Etiquetas_${fecha}_${this.tags.length}.xlsx`;
-
-                // Descargar archivo
                 XLSX.writeFile(wb, filename);
-
                 this.showAlert(`✓ Archivo exportado: ${filename}`, 'success');
             },
-
             updateUI() {
-                // Actualizar contador total
                 document.getElementById('totalScanned').textContent = this.tags.length;
-                
-                // Actualizar última etiqueta
                 const lastTag = this.tags[this.tags.length - 1];
                 const lastDisplay = lastTag ? lastTag.slice(-4) : '---';
                 document.getElementById('lastScanned').textContent = lastDisplay;
-
-                // Actualizar lista de etiquetas
                 this.updateTagList();
-
-                // Habilitar/deshabilitar botón de exportar
                 const btnExportMenu = document.getElementById('btnExportMenu');
                 if (btnExportMenu) {
                     btnExportMenu.disabled = this.tags.length === 0;
                 }
             },
-
             updateTagList() {
                 const tagList = document.getElementById('tagList');
-                
                 if (this.tags.length === 0) {
                     tagList.innerHTML = `
                         <div class="empty-state">
@@ -557,8 +473,6 @@
                     `;
                     return;
                 }
-
-                // Mostrar últimas 10 etiquetas (más recientes primero)
                 const recentTags = [...this.tags].reverse().slice(0, 10);
                 tagList.innerHTML = recentTags.map(tag => `
                     <div class="tag-item">
@@ -567,10 +481,8 @@
                     </div>
                 `).join('');
             },
-
             updateDeleteView() {
                 const deleteTagList = document.getElementById('deleteTagList');
-                
                 if (this.tags.length === 0) {
                     deleteTagList.innerHTML = `
                         <div class="empty-state">
@@ -579,7 +491,6 @@
                     `;
                     return;
                 }
-
                 deleteTagList.innerHTML = this.tags.slice().reverse().map(tag => `
                     <div class="tag-item">
                         <span class="tag-code">${tag}</span>
@@ -587,70 +498,54 @@
                     </div>
                 `).join('');
             },
-
             showAlert(message, type) {
                 const container = document.getElementById('alertContainer');
                 const alert = document.createElement('div');
                 alert.className = `alert alert-${type}`;
                 alert.textContent = message;
-                
                 container.innerHTML = '';
                 container.appendChild(alert);
-
                 setTimeout(() => {
                     alert.remove();
                 }, 3000);
             },
-
             playSuccessSound() {
                 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
                 const oscillator = audioContext.createOscillator();
                 const gainNode = audioContext.createGain();
-                
                 oscillator.connect(gainNode);
                 gainNode.connect(audioContext.destination);
-                
                 oscillator.frequency.value = 800;
                 oscillator.type = 'sine';
-                
                 gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
                 gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
-                
                 oscillator.start(audioContext.currentTime);
                 oscillator.stop(audioContext.currentTime + 0.1);
             },
-
             playErrorSound() {
                 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
                 const oscillator = audioContext.createOscillator();
                 const gainNode = audioContext.createGain();
-                
                 oscillator.connect(gainNode);
                 gainNode.connect(audioContext.destination);
-                
                 oscillator.frequency.value = 300;
                 oscillator.type = 'sawtooth';
-                
                 gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
                 gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
-                
                 oscillator.start(audioContext.currentTime);
                 oscillator.stop(audioContext.currentTime + 0.3);
             },
-
             showMenu() {
                 document.getElementById('menuView').classList.remove('hidden');
                 document.getElementById('scannerView').classList.add('hidden');
                 document.getElementById('deleteView').classList.add('hidden');
             },
-
             showScanner() {
                 document.getElementById('menuView').classList.add('hidden');
                 document.getElementById('scannerView').classList.remove('hidden');
                 document.getElementById('deleteView').classList.add('hidden');
                 this.focusInput();
             },
-
             showDeleteView() {
                 document.getElementById('menuView').classList.add('hidden');
                 document.getElementById('scannerView').classList.add('hidden');
@@ -659,13 +554,9 @@
                 document.getElementById('deleteInput').focus();
             }
         };
-
-        // Inicializar app
         document.addEventListener('DOMContentLoaded', () => {
             app.init();
         });
-
-        // Registrar Service Worker para PWA
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('data:application/javascript;base64,c2VsZi5hZGRFdmVudExpc3RlbmVyKCdpbnN0YWxsJywgKCkgPT4gc2VsZi5za2lwV2FpdGluZygpKTs=')
@@ -675,4 +566,3 @@
     </script>
 </body>
 </html>
-
