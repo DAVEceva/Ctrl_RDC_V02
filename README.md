@@ -1,72 +1,38 @@
-Zebra Scanner – Label Control
-A Progressive Web App (PWA) for automatic label control using Zebra mobile devices (barcode scanner) and manual code entry. Designed for fast tracking in warehouses, logistics centers, and stockrooms.
+Descripción General
+Zebra Scanner V02 es una aplicación web progresiva (PWA) diseñada para dispositivos ZEBRA. Permite al personal logístico registrar y controlar etiquetas de mercadería enviada desde una planta industrial a un centro de distribución, garantizando comparaciones precisas entre el control interno y el registro emitido por la planta mediante nuevo sistema de gestión SAP.​
 
-Main Features
-Automatic barcode scanning: Instantly records standard alphanumeric labels using a Zebra scanner.
+Flujo de Trabajo
+Ambos equipos (planta y logística) escanean las etiquetas de mercadería en simultáneo para mantener sincronización de registros.​
 
-Manual entry support: Allows quick validation of exceptional codes via the ✓ button.
+El operario logístico accede a la pantalla de “Cierre de control”, donde puede visualizar el total de etiquetas escaneadas y cargar el archivo Excel entregado por la planta (columna “O” – “Handling Unit”).​
 
-Duplicate detection: Prevents loading duplicate codes and displays both visual and audio alerts.
+La app realiza una comparación automática entre los datos escaneados y los del archivo importado, mostrando visualmente si los totales coinciden (verde/rojo).​
 
-Instant visualization: Displays all scanned labels and current totals on screen, live.
+Se genera una lista rápida de diferencias (sobrantes, faltantes, coincidencias) y permite búsquedas/filtros internos por código para facilitar la trazabilidad de casos dudosos.​
 
-Excel export: Enables download of the label list with the total count.
+Botón de exportación permite descargar un informe Excel con pestañas separadas para cada grupo (sobrantes, faltantes, coincidencias).​
 
-Full management: Individual removal, clearing all entries, and a smart navigation menu.
+Registro y Persistencia
+Cada acción relevante (escaneo, importación, filtros, exportaciones) se guarda automáticamente en el almacenamiento persistente (localStorage) del dispositivo, facilitando la recuperación del estado del control y del historial de operaciones aun si la app se cierra o el dispositivo se reinicia.​
 
-Mobile optimization: Responsive, touch-friendly interface, large buttons, and branded colors.
+Instrucciones de Uso
+Iniciar app en dispositivo ZEBRA y seleccionar “Empezar a escanear”.
 
-Requirements
-Zebra mobile device (but works in any modern browser).
+Registrar manualmente o mediante escáner todos los códigos de etiquetas, verificando que no se repitan.
 
-Chrome, Edge, or Firefox web browser (Android highly recommended).
+Al finalizar el escaneo, ingresar a la pantalla de “Cierre de control”.
 
-No heavy dependencies: pure HTML5, CSS3, and vanilla JavaScript.
+Cargar el archivo Excel recibido de planta. Usar la columna “O” (“Handling Unit”) para la comparación.
 
-SheetJS is included via CDN for Excel exports.
+Revisar la pantalla de comparación visual (verde/rojo), la lista de diferencias y usar los filtros/busqueda según sea necesario.
 
-Installation and Use
-Download the project
-Clone or download all files from the GitHub repository.
+Exportar el resultado en formato Excel para registro y análisis.
 
-Edit and preview locally
+Toda la actividad queda registrada y recuperable en el dispositivo.
 
-Open index.html in Visual Studio Code.
+Requerimientos Técnicos
+Dispositivo: ZEBRA con navegador compatible con PWA.
 
-Recommended: Install the Live Server extension for quick testing.
+Archivo importación de planta debe contener códigos en la columna “O”, bajo el encabezado “Handling Unit”.
 
-Publish via GitHub Pages
-
-Push your changes to your repo.
-
-Enable GitHub Pages, selecting the correct branch and root directory.
-
-Your application will be available at the public Pages URL.
-
-Install on Zebra or any smartphone
-
-Open the GitHub Pages link in any mobile browser.
-
-Use “Add to home screen” to install as a native app (PWA).
-
-Basic Usage
-Press "Start Scanning" and make sure the input field is focused.
-
-Unique codes are registered automatically (or manually with ✓ button).
-
-Duplicate codes are rejected with alert and sound.
-
-The menu lets you export, delete, or reset entries at any time.
-
-Colors and Design
-Background: corporate blue gradient.
-
-Buttons: gradient red for main actions.
-
-Text: always white for the best industrial visibility.
-
-Credits and License
-Developed as a logistics and inventory tracking solution.
-License: GPL-3.0.
-
-Questions or suggestions? Feel free to open an Issue or Pull Request!
+Conectividad opcional, ya que los datos y el progreso se almacenan localmente en el equipo.
