@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#1a4d7a">
-    <title>Zebra Scanner - Control de Etiquetas</title>
+    <title>Control de Etiquetas_V02</title>
     <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiWmVicmEgU2Nhbm5lciIsInNob3J0X25hbWUiOiJTY2FubmVyIiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiMxYTRkN2EiLCJ0aGVtZV9jb2xvciI6IiMxYTRkN2EifQ==">
     <style>
         * {
@@ -81,12 +81,17 @@
             background: linear-gradient(180deg, #43a047 0%, #2e7d32 100%);
             box-shadow: 0 2px 8px rgba(67, 160, 71, 0.3);
         }
+        .btn-info {
+            background: linear-gradient(180deg, #0288d1 0%, #01579b 100%);
+            box-shadow: 0 2px 8px rgba(2, 136, 209, 0.3);
+        }
         .input-group label,
         .stat-label,
         .empty-state p,
         .tag-item,
         #menuView .card h2,
-        #deleteView .card h2 {
+        #deleteView .card h2,
+        #closeView .card h2 {
             color: #fff;
         }
         .input-group {
@@ -96,7 +101,7 @@
             display: flex;
             gap: 8px;
         }
-        input[type="text"] {
+        input[type="text"], input[type="file"] {
             flex: 1;
             min-height: 56px;
             padding: 16px;
@@ -105,6 +110,10 @@
             border-radius: 12px;
             background: #224a76;
             color: #fff;
+        }
+        input[type="file"] {
+            padding: 12px;
+            cursor: pointer;
         }
         input[type="text"]:focus {
             outline: none;
@@ -196,6 +205,10 @@
             background: #43a047;
             border: 2px solid #66bb6a;
         }
+        .alert-info {
+            background: #0288d1;
+            border: 2px solid #4fc3f7;
+        }
         @keyframes slideIn {
             from {
                 opacity: 0;
@@ -212,6 +225,59 @@
         .menu-grid {
             display: grid;
             gap: 12px;
+        }
+        .comparison-result {
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 700;
+        }
+        .comparison-match {
+            background: linear-gradient(135deg, #43a047 0%, #2e7d32 100%);
+            border: 3px solid #66bb6a;
+        }
+        .comparison-mismatch {
+            background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);
+            border: 3px solid #ef5350;
+        }
+        .difference-section {
+            margin-top: 20px;
+        }
+        .difference-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+        }
+        .search-box {
+            margin: 16px 0;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+            background: #224a76;
+            color: #fff;
+            font-size: 14px;
+        }
+        .filter-buttons {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .filter-btn {
+            flex: 1;
+            padding: 10px;
+            font-size: 14px;
+            min-height: 44px;
+        }
+        .filter-btn.active {
+            background: linear-gradient(180deg, #0288d1 0%, #01579b 100%);
         }
         @media (max-width: 480px) {
             .container {
@@ -239,24 +305,44 @@
             margin-bottom: 16px;
             opacity: 0.5;
         }
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-left: 8px;
+        }
+        .badge-success {
+            background: #43a047;
+        }
+        .badge-error {
+            background: #d32f2f;
+        }
+        .badge-warning {
+            background: #ff9800;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🏷️ Zebra Scanner</h1>
+            <h1>🏷️ CEVA Logistics</h1>
             <p>Control de Etiquetas</p>
         </div>
+
         <!-- Vista Menu -->
         <div id="menuView" class="card">
             <h2 style="margin-bottom: 24px;">Menú Principal</h2>
             <div class="menu-grid">
                 <button class="btn" onclick="app.showScanner()">📱 Empezar a Escanear</button>
+                <button class="btn btn-info" onclick="app.showCloseControl()" id="btnCloseControl">📋 Cierre de Control</button>
                 <button class="btn btn-success" onclick="app.exportToExcel()" id="btnExportMenu">📊 Exportar Resultado</button>
                 <button class="btn btn-secondary" onclick="app.clearAll()">🗑️ Limpiar Resultado</button>
                 <button class="btn btn-secondary" onclick="app.showDeleteView()">❌ Eliminar Etiqueta</button>
             </div>
         </div>
+
         <!-- Vista Scanner -->
         <div id="scannerView" class="hidden">
             <div class="card">
@@ -274,10 +360,10 @@
                 <div class="input-group">
                     <label>Escanear o Ingresar Código</label>
                     <div class="input-wrapper">
-                        <input 
-                            type="text" 
-                            id="scanInput" 
-                            placeholder="R4600100005719" 
+                        <input
+                            type="text"
+                            id="scanInput"
+                            placeholder="R4600100005719"
                             autocomplete="off"
                             autocapitalize="characters">
                         <button class="btn btn-validate" onclick="app.validateManual()">✓</button>
@@ -293,20 +379,22 @@
                 </div>
             </div>
             <div class="card">
+                <button class="btn btn-info" onclick="app.showCloseControl()">📋 Ir a Cierre de Control</button>
                 <button class="btn btn-success" onclick="app.exportToExcel()">📊 Exportar a Excel</button>
                 <button class="btn btn-secondary" onclick="app.showMenu()">↩️ Volver al Menú</button>
             </div>
         </div>
+
         <!-- Vista Eliminar -->
         <div id="deleteView" class="hidden">
             <div class="card">
                 <h2 style="margin-bottom: 24px;">Eliminar Etiqueta</h2>
                 <div class="input-group">
                     <label>Código a Eliminar</label>
-                    <input 
-                        type="text" 
-                        id="deleteInput" 
-                        placeholder="R4600100005719" 
+                    <input
+                        type="text"
+                        id="deleteInput"
+                        placeholder="R4600100005719"
                         autocomplete="off"
                         autocapitalize="characters">
                 </div>
@@ -315,21 +403,127 @@
                 <div class="tag-list" id="deleteTagList" style="margin-top: 24px;"></div>
             </div>
         </div>
+
+        <!-- Vista Cierre de Control -->
+        <div id="closeView" class="hidden">
+            <div class="card">
+                <h2 style="margin-bottom: 24px;">📋 Cierre de Control</h2>
+                <div id="closeAlertContainer"></div>
+                
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="closeScannedTotal">0</div>
+                        <div class="stat-label">Escaneadas</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="closePlantTotal">0</div>
+                        <div class="stat-label">Planta</div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Importar Excel de Planta</label>
+                    <input
+                        type="file"
+                        id="plantFileInput"
+                        accept=".xlsx,.xls"
+                        onchange="app.handlePlantFile(event)">
+                </div>
+
+                <div id="comparisonResult"></div>
+
+                <div id="differenceControls" class="hidden">
+                    <div class="search-box">
+                        <input
+                            type="text"
+                            id="searchDifference"
+                            placeholder="🔍 Buscar código..."
+                            oninput="app.filterDifferences()">
+                    </div>
+
+                    <div class="filter-buttons">
+                        <button class="filter-btn btn-secondary active" onclick="app.setFilter('all')">Todos</button>
+                        <button class="filter-btn btn-secondary" onclick="app.setFilter('surplus')">Sobrantes</button>
+                        <button class="filter-btn btn-secondary" onclick="app.setFilter('missing')">Faltantes</button>
+                        <button class="filter-btn btn-secondary" onclick="app.setFilter('matches')">Coincidencias</button>
+                    </div>
+
+                    <div id="differenceDetails"></div>
+
+                    <button class="btn btn-success" onclick="app.exportComparisonReport()">📊 Exportar Informe Completo</button>
+                </div>
+            </div>
+            <div class="card">
+                <button class="btn btn-secondary" onclick="app.showMenu()">↩️ Volver al Menú</button>
+            </div>
+        </div>
     </div>
+
     <!-- SheetJS Library -->
     <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
     <script>
         const app = {
             tags: [],
+            plantTags: [],
             lastAddLock: false,
+            currentFilter: 'all',
+            searchTerm: '',
+
             normalizeCode(str) {
                 return (str || "").trim().replace(/\r/g, "").replace(/\n/g, "").toUpperCase();
             },
+
             init() {
+                this.loadFromStorage();
                 this.setupEventListeners();
                 this.focusInput();
                 this.updateUI();
+                this.logAction('APP_INIT', 'Aplicación inicializada');
             },
+
+            loadFromStorage() {
+                try {
+                    const stored = localStorage.getItem('zebraScanner_v02');
+                    if (stored) {
+                        const data = JSON.parse(stored);
+                        this.tags = data.tags || [];
+                        this.plantTags = data.plantTags || [];
+                        console.log('Estado recuperado desde localStorage');
+                    }
+                } catch (e) {
+                    console.error('Error al cargar desde localStorage:', e);
+                }
+            },
+
+            saveToStorage() {
+                try {
+                    const data = {
+                        tags: this.tags,
+                        plantTags: this.plantTags,
+                        lastUpdate: new Date().toISOString()
+                    };
+                    localStorage.setItem('zebraScanner_v02', JSON.stringify(data));
+                } catch (e) {
+                    console.error('Error al guardar en localStorage:', e);
+                }
+            },
+
+            logAction(action, details) {
+                try {
+                    const logs = JSON.parse(localStorage.getItem('zebraScanner_logs') || '[]');
+                    logs.push({
+                        timestamp: new Date().toISOString(),
+                        action: action,
+                        details: details,
+                        tagsCount: this.tags.length
+                    });
+                    if (logs.length > 500) logs.shift();
+                    localStorage.setItem('zebraScanner_logs', JSON.stringify(logs));
+                } catch (e) {
+                    console.error('Error al registrar acción:', e);
+                }
+            },
+
             setupEventListeners() {
                 const scanInput = document.getElementById('scanInput');
                 scanInput.addEventListener('input', (e) => {
@@ -349,6 +543,7 @@
                     }
                 });
             },
+
             focusInput() {
                 setTimeout(() => {
                     const scanInput = document.getElementById('scanInput');
@@ -357,6 +552,7 @@
                     }
                 }, 100);
             },
+
             addTag(code) {
                 code = this.normalizeCode(code);
                 if (!code) {
@@ -365,18 +561,23 @@
                 if (this.lastAddLock) return;
                 this.lastAddLock = true;
                 setTimeout(() => { this.lastAddLock = false; }, 400);
+
                 if (this.tags.includes(code)) {
                     this.showAlert('⚠️ ETIQUETA YA CONTROLADA', 'error');
                     this.playErrorSound();
                     this.focusInput();
                     return;
                 }
+
                 this.tags.push(code);
+                this.saveToStorage();
+                this.logAction('TAG_ADDED', `Etiqueta agregada: ${code}`);
                 this.showAlert('✓ Etiqueta registrada', 'success');
                 this.playSuccessSound();
                 this.updateUI();
                 this.focusInput();
             },
+
             validateManual() {
                 const scanInput = document.getElementById('scanInput');
                 const value = this.normalizeCode(scanInput.value);
@@ -387,6 +588,7 @@
                 this.addTag(value);
                 scanInput.value = '';
             },
+
             deleteTag() {
                 const deleteInput = document.getElementById('deleteInput');
                 const code = this.normalizeCode(deleteInput.value);
@@ -400,19 +602,25 @@
                     return;
                 }
                 this.tags.splice(index, 1);
+                this.saveToStorage();
+                this.logAction('TAG_DELETED', `Etiqueta eliminada: ${code}`);
                 this.showAlert('✓ Etiqueta eliminada', 'success');
                 deleteInput.value = '';
                 this.updateUI();
                 this.updateDeleteView();
             },
+
             deleteTagFromList(code) {
                 const index = this.tags.indexOf(code);
                 if (index > -1) {
                     this.tags.splice(index, 1);
+                    this.saveToStorage();
+                    this.logAction('TAG_DELETED_LIST', `Etiqueta eliminada desde lista: ${code}`);
                     this.updateUI();
                     this.updateDeleteView();
                 }
             },
+
             clearAll() {
                 if (this.tags.length === 0) {
                     this.showAlert('⚠️ No hay etiquetas para limpiar', 'error');
@@ -420,10 +628,14 @@
                 }
                 if (confirm(`¿Está seguro de eliminar todas las ${this.tags.length} etiquetas?`)) {
                     this.tags = [];
+                    this.plantTags = [];
+                    this.saveToStorage();
+                    this.logAction('CLEAR_ALL', 'Todas las etiquetas eliminadas');
                     this.updateUI();
                     this.showAlert('✓ Todas las etiquetas eliminadas', 'success');
                 }
             },
+
             exportToExcel() {
                 if (this.tags.length === 0) {
                     this.showAlert('⚠️ No hay etiquetas para exportar', 'error');
@@ -447,8 +659,244 @@
                 const fecha = new Date().toISOString().split('T')[0];
                 const filename = `Etiquetas_${fecha}_${this.tags.length}.xlsx`;
                 XLSX.writeFile(wb, filename);
+                this.logAction('EXPORT_EXCEL', `Exportación: ${filename}`);
                 this.showAlert(`✓ Archivo exportado: ${filename}`, 'success');
             },
+
+            handlePlantFile(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                this.showAlert('📂 Procesando archivo...', 'info', 'close');
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const data = new Uint8Array(e.target.result);
+                        const workbook = XLSX.read(data, { type: 'array' });
+                        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                        const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+
+                        let columnIndex = -1;
+                        if (jsonData.length > 0) {
+                            const headerRow = jsonData[0];
+                            columnIndex = headerRow.findIndex(col => 
+                                col && col.toString().toLowerCase().includes('handling unit')
+                            );
+                        }
+
+                        if (columnIndex === -1) {
+                            this.showAlert('⚠️ No se encontró la columna "Handling Unit"', 'error', 'close');
+                            return;
+                        }
+
+                        this.plantTags = [];
+                        for (let i = 1; i < jsonData.length; i++) {
+                            const row = jsonData[i];
+                            if (row && row[columnIndex]) {
+                                const code = this.normalizeCode(row[columnIndex].toString());
+                                if (code && code.match(/^R\d{13}$/)) {
+                                    this.plantTags.push(code);
+                                }
+                            }
+                        }
+
+                        this.saveToStorage();
+                        this.logAction('PLANT_FILE_IMPORTED', `Archivo importado: ${this.plantTags.length} códigos`);
+                        this.compareData();
+                    } catch (error) {
+                        console.error('Error al procesar archivo:', error);
+                        this.showAlert('❌ Error al procesar el archivo', 'error', 'close');
+                    }
+                };
+                reader.readAsArrayBuffer(file);
+            },
+
+            compareData() {
+                if (this.plantTags.length === 0) {
+                    this.showAlert('⚠️ No hay datos de planta para comparar', 'error', 'close');
+                    return;
+                }
+
+                const scannedSet = new Set(this.tags);
+                const plantSet = new Set(this.plantTags);
+
+                const surplus = this.tags.filter(tag => !plantSet.has(tag));
+                const missing = this.plantTags.filter(tag => !scannedSet.has(tag));
+                const matches = this.tags.filter(tag => plantSet.has(tag));
+
+                const isMatch = surplus.length === 0 && missing.length === 0;
+
+                document.getElementById('closeScannedTotal').textContent = this.tags.length;
+                document.getElementById('closePlantTotal').textContent = this.plantTags.length;
+
+                const resultHTML = `
+                    <div class="comparison-result ${isMatch ? 'comparison-match' : 'comparison-mismatch'}">
+                        ${isMatch ? '✓ LOS TOTALES COINCIDEN' : '⚠️ HAY DIFERENCIAS'}
+                        <div style="font-size: 14px; margin-top: 8px; font-weight: 400;">
+                            ${isMatch ? 'Control exitoso' : `${surplus.length} sobrantes • ${missing.length} faltantes`}
+                        </div>
+                    </div>
+                `;
+
+                document.getElementById('comparisonResult').innerHTML = resultHTML;
+                document.getElementById('differenceControls').classList.remove('hidden');
+
+                this.displayDifferences(surplus, missing, matches);
+                this.logAction('COMPARISON_DONE', `Comparación realizada: ${surplus.length} sobrantes, ${missing.length} faltantes`);
+            },
+
+            displayDifferences(surplus, missing, matches) {
+                let html = '';
+
+                if (surplus.length > 0) {
+                    html += `<div class="difference-section">
+                        <div class="difference-title">🔴 Sobrantes (${surplus.length}) <span class="badge badge-error">${surplus.length}</span></div>
+                        <div class="tag-list" id="surplusList"></div>
+                    </div>`;
+                }
+
+                if (missing.length > 0) {
+                    html += `<div class="difference-section">
+                        <div class="difference-title">🟡 Faltantes (${missing.length}) <span class="badge badge-warning">${missing.length}</span></div>
+                        <div class="tag-list" id="missingList"></div>
+                    </div>`;
+                }
+
+                if (matches.length > 0) {
+                    html += `<div class="difference-section">
+                        <div class="difference-title">🟢 Coincidencias (${matches.length}) <span class="badge badge-success">${matches.length}</span></div>
+                        <div class="tag-list" id="matchesList"></div>
+                    </div>`;
+                }
+
+                document.getElementById('differenceDetails').innerHTML = html;
+
+                this.renderFilteredList('surplusList', surplus);
+                this.renderFilteredList('missingList', missing);
+                this.renderFilteredList('matchesList', matches);
+            },
+
+            renderFilteredList(elementId, items) {
+                const container = document.getElementById(elementId);
+                if (!container) return;
+
+                let filtered = items;
+
+                if (this.searchTerm) {
+                    filtered = items.filter(code => code.includes(this.searchTerm.toUpperCase()));
+                }
+
+                if (filtered.length === 0) {
+                    container.innerHTML = '<div class="empty-state"><p>No hay elementos</p></div>';
+                    return;
+                }
+
+                container.innerHTML = filtered.map(code => `
+                    <div class="tag-item">
+                        <span class="tag-code">${code}</span>
+                    </div>
+                `).join('');
+            },
+
+            setFilter(filter) {
+                this.currentFilter = filter;
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                event.target.classList.add('active');
+
+                const sections = document.querySelectorAll('.difference-section');
+                sections.forEach(section => section.style.display = 'block');
+
+                if (filter === 'surplus') {
+                    document.getElementById('missingList')?.parentElement.parentElement.style.setProperty('display', 'none');
+                    document.getElementById('matchesList')?.parentElement.parentElement.style.setProperty('display', 'none');
+                } else if (filter === 'missing') {
+                    document.getElementById('surplusList')?.parentElement.parentElement.style.setProperty('display', 'none');
+                    document.getElementById('matchesList')?.parentElement.parentElement.style.setProperty('display', 'none');
+                } else if (filter === 'matches') {
+                    document.getElementById('surplusList')?.parentElement.parentElement.style.setProperty('display', 'none');
+                    document.getElementById('missingList')?.parentElement.parentElement.style.setProperty('display', 'none');
+                }
+
+                this.logAction('FILTER_CHANGED', `Filtro cambiado a: ${filter}`);
+            },
+
+            filterDifferences() {
+                this.searchTerm = document.getElementById('searchDifference').value;
+                
+                const scannedSet = new Set(this.tags);
+                const plantSet = new Set(this.plantTags);
+
+                const surplus = this.tags.filter(tag => !plantSet.has(tag));
+                const missing = this.plantTags.filter(tag => !scannedSet.has(tag));
+                const matches = this.tags.filter(tag => plantSet.has(tag));
+
+                this.renderFilteredList('surplusList', surplus);
+                this.renderFilteredList('missingList', missing);
+                this.renderFilteredList('matchesList', matches);
+            },
+
+            exportComparisonReport() {
+                if (this.plantTags.length === 0) {
+                    this.showAlert('⚠️ No hay comparación para exportar', 'error', 'close');
+                    return;
+                }
+
+                const scannedSet = new Set(this.tags);
+                const plantSet = new Set(this.plantTags);
+
+                const surplus = this.tags.filter(tag => !plantSet.has(tag));
+                const missing = this.plantTags.filter(tag => !scannedSet.has(tag));
+                const matches = this.tags.filter(tag => plantSet.has(tag));
+
+                const wb = XLSX.utils.book_new();
+
+                // Hoja Resumen
+                const summaryData = [
+                    ['RESUMEN DE CONTROL'],
+                    ['Fecha', new Date().toLocaleString('es-AR')],
+                    [''],
+                    ['Etiquetas Escaneadas', this.tags.length],
+                    ['Etiquetas Planta', this.plantTags.length],
+                    [''],
+                    ['Coincidencias', matches.length],
+                    ['Sobrantes', surplus.length],
+                    ['Faltantes', missing.length],
+                    [''],
+                    ['Estado', surplus.length === 0 && missing.length === 0 ? '✓ COINCIDE' : '⚠️ HAY DIFERENCIAS']
+                ];
+                const wsSummary = XLSX.utils.aoa_to_sheet(summaryData);
+                XLSX.utils.book_append_sheet(wb, wsSummary, 'Resumen');
+
+                // Hoja Sobrantes
+                const surplusData = surplus.map((tag, i) => ({ 'N°': i + 1, 'Código': tag, 'Estado': 'Sobrante' }));
+                if (surplusData.length > 0) {
+                    const wsSurplus = XLSX.utils.json_to_sheet(surplusData);
+                    XLSX.utils.book_append_sheet(wb, wsSurplus, 'Sobrantes');
+                }
+
+                // Hoja Faltantes
+                const missingData = missing.map((tag, i) => ({ 'N°': i + 1, 'Código': tag, 'Estado': 'Faltante' }));
+                if (missingData.length > 0) {
+                    const wsMissing = XLSX.utils.json_to_sheet(missingData);
+                    XLSX.utils.book_append_sheet(wb, wsMissing, 'Faltantes');
+                }
+
+                // Hoja Coincidencias
+                const matchesData = matches.map((tag, i) => ({ 'N°': i + 1, 'Código': tag, 'Estado': 'Coincide' }));
+                if (matchesData.length > 0) {
+                    const wsMatches = XLSX.utils.json_to_sheet(matchesData);
+                    XLSX.utils.book_append_sheet(wb, wsMatches, 'Coincidencias');
+                }
+
+                const fecha = new Date().toISOString().split('T')[0];
+                const filename = `Informe_Control_${fecha}.xlsx`;
+                XLSX.writeFile(wb, filename);
+
+                this.logAction('EXPORT_COMPARISON', `Informe exportado: ${filename}`);
+                this.showAlert(`✓ Informe exportado: ${filename}`, 'success', 'close');
+            },
+
             updateUI() {
                 document.getElementById('totalScanned').textContent = this.tags.length;
                 const lastTag = this.tags[this.tags.length - 1];
@@ -456,10 +904,15 @@
                 document.getElementById('lastScanned').textContent = lastDisplay;
                 this.updateTagList();
                 const btnExportMenu = document.getElementById('btnExportMenu');
+                const btnCloseControl = document.getElementById('btnCloseControl');
                 if (btnExportMenu) {
                     btnExportMenu.disabled = this.tags.length === 0;
                 }
+                if (btnCloseControl) {
+                    btnCloseControl.disabled = this.tags.length === 0;
+                }
             },
+
             updateTagList() {
                 const tagList = document.getElementById('tagList');
                 if (this.tags.length === 0) {
@@ -481,6 +934,7 @@
                     </div>
                 `).join('');
             },
+
             updateDeleteView() {
                 const deleteTagList = document.getElementById('deleteTagList');
                 if (this.tags.length === 0) {
@@ -498,8 +952,12 @@
                     </div>
                 `).join('');
             },
-            showAlert(message, type) {
-                const container = document.getElementById('alertContainer');
+
+            showAlert(message, type, viewId = 'scanner') {
+                const containerId = viewId === 'close' ? 'closeAlertContainer' : 'alertContainer';
+                const container = document.getElementById(containerId);
+                if (!container) return;
+                
                 const alert = document.createElement('div');
                 alert.className = `alert alert-${type}`;
                 alert.textContent = message;
@@ -509,6 +967,7 @@
                     alert.remove();
                 }, 3000);
             },
+
             playSuccessSound() {
                 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
                 const oscillator = audioContext.createOscillator();
@@ -522,6 +981,7 @@
                 oscillator.start(audioContext.currentTime);
                 oscillator.stop(audioContext.currentTime + 0.1);
             },
+
             playErrorSound() {
                 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
                 const oscillator = audioContext.createOscillator();
@@ -535,28 +995,58 @@
                 oscillator.start(audioContext.currentTime);
                 oscillator.stop(audioContext.currentTime + 0.3);
             },
+
             showMenu() {
                 document.getElementById('menuView').classList.remove('hidden');
                 document.getElementById('scannerView').classList.add('hidden');
                 document.getElementById('deleteView').classList.add('hidden');
+                document.getElementById('closeView').classList.add('hidden');
+                this.logAction('VIEW_MENU', 'Vista menú mostrada');
             },
+
             showScanner() {
                 document.getElementById('menuView').classList.add('hidden');
                 document.getElementById('scannerView').classList.remove('hidden');
                 document.getElementById('deleteView').classList.add('hidden');
+                document.getElementById('closeView').classList.add('hidden');
                 this.focusInput();
+                this.logAction('VIEW_SCANNER', 'Vista scanner mostrada');
             },
+
             showDeleteView() {
                 document.getElementById('menuView').classList.add('hidden');
                 document.getElementById('scannerView').classList.add('hidden');
                 document.getElementById('deleteView').classList.remove('hidden');
+                document.getElementById('closeView').classList.add('hidden');
                 this.updateDeleteView();
                 document.getElementById('deleteInput').focus();
+                this.logAction('VIEW_DELETE', 'Vista eliminar mostrada');
+            },
+
+            showCloseControl() {
+                if (this.tags.length === 0) {
+                    this.showAlert('⚠️ No hay etiquetas escaneadas', 'error');
+                    return;
+                }
+                document.getElementById('menuView').classList.add('hidden');
+                document.getElementById('scannerView').classList.add('hidden');
+                document.getElementById('deleteView').classList.add('hidden');
+                document.getElementById('closeView').classList.remove('hidden');
+                
+                document.getElementById('closeScannedTotal').textContent = this.tags.length;
+                document.getElementById('closePlantTotal').textContent = this.plantTags.length;
+                
+                if (this.plantTags.length > 0) {
+                    this.compareData();
+                }
+                this.logAction('VIEW_CLOSE', 'Vista cierre de control mostrada');
             }
         };
+
         document.addEventListener('DOMContentLoaded', () => {
             app.init();
         });
+
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('data:application/javascript;base64,c2VsZi5hZGRFdmVudExpc3RlbmVyKCdpbnN0YWxsJywgKCkgPT4gc2VsZi5za2lwV2FpdGluZygpKTs=')
